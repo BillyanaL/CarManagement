@@ -1,35 +1,15 @@
-package org.fmiplovdiv.carmanagementapi.model.entities;
+package org.fmiplovdiv.carmanagementapi.model.dtos;
 
-import jakarta.persistence.*;
+public class ResponseGarageDTO {
 
-@Entity
-@Table(name = "garages")
-public class Garage {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
-
     private String location;
-
     private String city;
-
     private Integer capacity;
 
-    public Garage() {
-    }
-
-    public Garage(Long id, String name, String location, String city, Integer capacity) {
+    public ResponseGarageDTO(Long id, String name, String location, String city, Integer capacity) {
         this.id = id;
-        this.name = name;
-        this.location = location;
-        this.city = city;
-        this.capacity = capacity;
-    }
-
-    public Garage(String name, String location, String city, Integer capacity) {
         this.name = name;
         this.location = location;
         this.city = city;

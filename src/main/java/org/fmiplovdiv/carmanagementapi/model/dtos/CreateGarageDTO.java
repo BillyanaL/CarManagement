@@ -1,47 +1,17 @@
-package org.fmiplovdiv.carmanagementapi.model.entities;
+package org.fmiplovdiv.carmanagementapi.model.dtos;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "garages")
-public class Garage {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class CreateGarageDTO {
 
     private String name;
-
     private String location;
-
     private String city;
-
     private Integer capacity;
 
-    public Garage() {
-    }
-
-    public Garage(Long id, String name, String location, String city, Integer capacity) {
-        this.id = id;
+    public CreateGarageDTO(String name, String location, String city, Integer capacity) {
         this.name = name;
         this.location = location;
         this.city = city;
         this.capacity = capacity;
-    }
-
-    public Garage(String name, String location, String city, Integer capacity) {
-        this.name = name;
-        this.location = location;
-        this.city = city;
-        this.capacity = capacity;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -75,4 +45,6 @@ public class Garage {
     public void setCapacity(Integer capacity) {
         this.capacity = capacity;
     }
+
+
 }
