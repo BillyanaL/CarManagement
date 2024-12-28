@@ -39,7 +39,6 @@ public class CarServiceImpl implements CarService {
 
         return carRepository.findById(id).map(this::mapCarToDTO);
     }
-
     public ResponseCarDTO createNewCar(CreateCarDTO carDTO){
 
         Car newCar = this.mapCarDtoToCar(carDTO);
