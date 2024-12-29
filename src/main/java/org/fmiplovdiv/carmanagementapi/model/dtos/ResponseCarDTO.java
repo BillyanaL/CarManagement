@@ -1,6 +1,5 @@
 package org.fmiplovdiv.carmanagementapi.model.dtos;
 
-import java.util.List;
 import java.util.Set;
 
 public class ResponseCarDTO {

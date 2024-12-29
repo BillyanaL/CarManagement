@@ -61,6 +61,21 @@ public class MaintenanceController {
         return ResponseEntity.ok(responseDTO);
     }
 
+    @GetMapping("/monthlyRequestsReport")
+    public ResponseEntity<List<MonthlyRequestsReportDTO>> getMonthlyReport(
+            @RequestParam(required = false) Long garageId,
+            @RequestParam(value = "startMonth",defaultValue = "2024-01") String startMonth,
+            @RequestParam(value = "endMonth",defaultValue = "2024-12") String endMonth) {
+
+
+        List<MonthlyRequestsReportDTO> responseDTO = maintenanceService.generateMonthlyReport(garageId, startMonth, endMonth);
+        return ResponseEntity.ok(responseDTO);
+    }
+
+
+
+
+
 
 
 }

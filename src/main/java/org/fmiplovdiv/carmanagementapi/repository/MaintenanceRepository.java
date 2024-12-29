@@ -27,7 +27,14 @@ public interface MaintenanceRepository extends JpaRepository<Maintenance,Long> {
     @Query("SELECT COUNT(m) FROM Maintenance m WHERE m.garage.id = :garageId AND m.scheduledDate = :scheduledDate")
     long countByGarageIdAndScheduledDate(@Param("garageId") Long garageId, @Param("scheduledDate") LocalDate scheduledDate);
 
-
+    @Query("SELECT FUNCTION('DATE_FORMAT', m.scheduledDate, '%Y-%m') AS yearMonth, COUNT(m) " +
+            "FROM Maintenance m " +
+            "WHERE m.garage.id = :garageId " +
+            "AND m.scheduledDate >= :startDate AND m.scheduledDate <= :endDate " +
+            "GROUP BY FUNCTION('DATE_FORMAT', m.scheduledDate, '%Y-%m')")
+    List<Object[]> findMaintenanceStatsByMonth(@Param("garageId") Long garageId,
+                                               @Param("startDate") LocalDate startDate,
+                                               @Param("endDate") LocalDate endDate);
 
 
 }

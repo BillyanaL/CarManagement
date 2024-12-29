@@ -1,6 +1,7 @@
 package org.fmiplovdiv.carmanagementapi.service.impl;
 
 import org.fmiplovdiv.carmanagementapi.model.dtos.CreateGarageDTO;
+import org.fmiplovdiv.carmanagementapi.model.dtos.GarageDailyAvailabilityReportDTO;
 import org.fmiplovdiv.carmanagementapi.model.dtos.ResponseGarageDTO;
 import org.fmiplovdiv.carmanagementapi.model.dtos.UpdateGarageDTO;
 import org.fmiplovdiv.carmanagementapi.model.entities.Garage;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,7 +47,7 @@ public class GarageServiceImpl implements GarageService {
     public ResponseGarageDTO createNewGarage(CreateGarageDTO garageDTO){
 
         Garage newGarage = this.mapGarageDtoToGarage(garageDTO);
-        newGarage = (Garage)this.garageRepository.save(newGarage);
+        newGarage = this.garageRepository.save(newGarage);
 
         return this.mapGarageToDTO(newGarage);
 
@@ -83,6 +86,34 @@ public class GarageServiceImpl implements GarageService {
 
         return this.mapGarageToDTO(garage);
 
+    }
+
+    public List<GarageDailyAvailabilityReportDTO> getDailyAvailabilityReport(Long garageId, String startDate, String endDate) {
+        LocalDate start = LocalDate.parse(startDate);
+        LocalDate end = LocalDate.parse(endDate);
+
+        if (start.isAfter(end)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Start date must be before or equal to end date.");
+        }
+
+        Integer garageCapacity = garageRepository.getGarageCapacity(garageId);
+        List<Object[]> dailyRequests = garageRepository.getDailyRequests(garageId, start, end);
+
+        return mapToAvailabilityReport(dailyRequests, garageCapacity);
+    }
+
+    private List<GarageDailyAvailabilityReportDTO> mapToAvailabilityReport(List<Object[]> dailyRequests, Integer garageCapacity) {
+        List<GarageDailyAvailabilityReportDTO> reportList = new ArrayList<>();
+
+        for (Object[] result : dailyRequests) {
+            String date = result[0].toString();
+            Integer requests = ((Number) result[1]).intValue();
+            Integer availableCapacity = garageCapacity - requests;
+
+            reportList.add(new GarageDailyAvailabilityReportDTO(date, requests, availableCapacity));
+        }
+
+        return reportList;
     }
 
 

@@ -1,8 +1,6 @@
 package org.fmiplovdiv.carmanagementapi.service;
 
-import org.fmiplovdiv.carmanagementapi.model.dtos.CreateMaintenanceDTO;
-import org.fmiplovdiv.carmanagementapi.model.dtos.ResponseMaintenanceDTO;
-import org.fmiplovdiv.carmanagementapi.model.dtos.UpdateMaintenanceDTO;
+import org.fmiplovdiv.carmanagementapi.model.dtos.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,4 +18,6 @@ public interface MaintenanceService {
 
     ResponseMaintenanceDTO updateMaintenance(Long id, UpdateMaintenanceDTO updateDTO);
     ResponseMaintenanceDTO deleteMaintenance(Long id);
+    List<MonthlyRequestsReportDTO> generateMonthlyReport(Long garageId, String startMonth, String endMonth);
+
 }

@@ -1,6 +1,7 @@
 package org.fmiplovdiv.carmanagementapi.web;
 
 import org.fmiplovdiv.carmanagementapi.model.dtos.CreateGarageDTO;
+import org.fmiplovdiv.carmanagementapi.model.dtos.GarageDailyAvailabilityReportDTO;
 import org.fmiplovdiv.carmanagementapi.model.dtos.ResponseGarageDTO;
 import org.fmiplovdiv.carmanagementapi.model.dtos.UpdateGarageDTO;
 import org.fmiplovdiv.carmanagementapi.service.GarageService;
@@ -62,6 +63,14 @@ public class GarageController {
         ResponseGarageDTO responseDTO = this.garageService.deleteGarage(id);
 
         return ResponseEntity.ok(responseDTO);
+    }
+
+    @GetMapping("/dailyAvailabilityReport")
+    public List<GarageDailyAvailabilityReportDTO> getGarageAvailabilityReport(@RequestParam Long garageId,
+                                                                              @RequestParam String startDate,
+                                                                              @RequestParam String endDate) {
+
+        return garageService.getDailyAvailabilityReport(garageId, startDate, endDate);
     }
 
 }

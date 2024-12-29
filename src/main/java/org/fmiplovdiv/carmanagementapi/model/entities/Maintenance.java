@@ -65,23 +65,6 @@ public class Maintenance {
         this.scheduledDate = scheduledDate;
     }
 
-// CONVERTER
-//    public YearMonth getScheduledYearMonth() {
-//        if (scheduledDate == null) {
-//            return null;
-//        }
-//        return YearMonth.from(scheduledDate);
-//    }
-//
-//    public void setScheduledYearMonth(YearMonth yearMonth) {
-//        if (yearMonth != null) {
-//            this.scheduledDate = yearMonth.atDay(1);
-//        } else {
-//            this.scheduledDate = null;
-//        }
-//    }
-
-
     public Garage getGarage() {
         return garage;
     }

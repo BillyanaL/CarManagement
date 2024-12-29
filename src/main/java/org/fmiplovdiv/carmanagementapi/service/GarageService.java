@@ -1,6 +1,7 @@
 package org.fmiplovdiv.carmanagementapi.service;
 
 import org.fmiplovdiv.carmanagementapi.model.dtos.CreateGarageDTO;
+import org.fmiplovdiv.carmanagementapi.model.dtos.GarageDailyAvailabilityReportDTO;
 import org.fmiplovdiv.carmanagementapi.model.dtos.ResponseGarageDTO;
 import org.fmiplovdiv.carmanagementapi.model.dtos.UpdateGarageDTO;
 
@@ -19,4 +20,6 @@ public interface GarageService {
     ResponseGarageDTO updateGarage(Long id, UpdateGarageDTO updateGarageDTO);
 
     ResponseGarageDTO deleteGarage(Long id);
+
+    List<GarageDailyAvailabilityReportDTO> getDailyAvailabilityReport(Long garageId, String startDate, String endDate);
 }

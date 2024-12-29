@@ -1,8 +1,6 @@
 package org.fmiplovdiv.carmanagementapi.service.impl;
 
-import org.fmiplovdiv.carmanagementapi.model.dtos.CreateMaintenanceDTO;
-import org.fmiplovdiv.carmanagementapi.model.dtos.ResponseMaintenanceDTO;
-import org.fmiplovdiv.carmanagementapi.model.dtos.UpdateMaintenanceDTO;
+import org.fmiplovdiv.carmanagementapi.model.dtos.*;
 import org.fmiplovdiv.carmanagementapi.model.entities.Car;
 import org.fmiplovdiv.carmanagementapi.model.entities.Garage;
 import org.fmiplovdiv.carmanagementapi.model.entities.Maintenance;
@@ -15,9 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class MaintenanceServiceImpl implements MaintenanceService {
@@ -137,6 +135,49 @@ public class MaintenanceServiceImpl implements MaintenanceService {
 
         return scheduledCount < garage.getCapacity();
     }
+
+    public List<MonthlyRequestsReportDTO> generateMonthlyReport(Long garageId, String startMonth, String endMonth) {
+
+        YearMonth start = YearMonth.parse(startMonth, DateTimeFormatter.ofPattern("yyyy-MM"));
+        YearMonth end = YearMonth.parse(endMonth, DateTimeFormatter.ofPattern("yyyy-MM"));
+
+        LocalDate startLocalDate = start.atDay(1);
+        LocalDate endLocalDate = end.atEndOfMonth();
+
+        List<Object[]> stats = maintenanceRepository.findMaintenanceStatsByMonth(garageId, startLocalDate, endLocalDate);
+
+        List<YearMonth> allMonths = generateMonthsInRange(start, end);
+
+        Map<YearMonth, Long> monthStatsMap = new HashMap<>();
+        for (Object[] stat : stats) {
+            String yearMonthString = (String) stat[0];
+            YearMonth yearMonth = YearMonth.parse(yearMonthString);
+            Long requestCount = (Long) stat[1];
+            monthStatsMap.put(yearMonth, requestCount);
+        }
+
+        List<MonthlyRequestsReportDTO> report = new ArrayList<>();
+        for (YearMonth yearMonth : allMonths) {
+            Long requestCount = monthStatsMap.getOrDefault(yearMonth, 0L);
+            report.add(new MonthlyRequestsReportDTO(yearMonth.toString(), requestCount));
+        }
+
+        return report;
+    }
+
+    private List<YearMonth> generateMonthsInRange(YearMonth start, YearMonth end) {
+        List<YearMonth> months = new ArrayList<>();
+        YearMonth current = start;
+
+        while (!current.isAfter(end)) {
+            months.add(current);
+            current = current.plusMonths(1);
+        }
+
+        return months;
+    }
+
+
 
     private ResponseMaintenanceDTO mapMaintenanceToDTO(Maintenance maintenance){
 
